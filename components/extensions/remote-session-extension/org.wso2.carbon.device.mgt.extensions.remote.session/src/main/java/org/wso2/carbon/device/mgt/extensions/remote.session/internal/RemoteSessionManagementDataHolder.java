@@ -43,10 +43,17 @@ public class RemoteSessionManagementDataHolder {
     private OAuthAuthenticator oAuthAuthenticator;
     private Map<String, RemoteSession> activeDeviceClientSessionMap = new ConcurrentHashMap<String, RemoteSession>();
     private Map<String, RemoteSession> sessionMap = new ConcurrentHashMap<String, RemoteSession>();
+    private static Map<String, String> uuidToTenantMap = new ConcurrentHashMap<String, String>();
+
+    public Map<String, String> getUuidToTenantMap() {
+        return uuidToTenantMap;
+    }
 
     public static RemoteSessionManagementDataHolder getInstance() {
         return thisInstance;
     }
+
+    private RemoteSessionManagementDataHolder(){}
 
     public DeviceManagementProviderService getDeviceManagementProviderService() {
         return deviceManagementProviderService;
