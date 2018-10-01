@@ -40,13 +40,7 @@ import javax.websocket.CloseReason;
 import javax.websocket.Session;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Class @{@link RemoteSessionManagementServiceImpl} is the implementation of @{@link RemoteSessionManagementService}
@@ -136,7 +130,16 @@ public class RemoteSessionManagementServiceImpl implements RemoteSessionManageme
             session.setMaxTextMessageBufferSize(RemoteSessionManagementDataHolder.getInstance()
                     .getMaxMessageBufferSize());
             session.setMaxIdleTimeout(RemoteSessionManagementDataHolder.getInstance().getMaxIdleTimeout());
-            String uuid = session.getQueryString();
+            String uuid = null;
+            String queryParam = session.getQueryString();
+            String[] rawUUID = queryParam.split("=");
+            if (rawUUID.length != 2) {
+                log.warn("Invalid query string [" + Arrays.toString(rawUUID) + "] passed in.");
+            }
+
+            if (rawUUID[0].equals("websocketToken")) {
+                uuid = rawUUID[1];
+            }
 
             if (uuid != null && uuid.isEmpty()) {
                 log.error("Could not find a UUID related to the remote session");
