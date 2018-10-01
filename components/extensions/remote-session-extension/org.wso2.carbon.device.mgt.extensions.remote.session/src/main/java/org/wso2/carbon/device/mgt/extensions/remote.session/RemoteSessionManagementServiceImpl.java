@@ -141,9 +141,7 @@ public class RemoteSessionManagementServiceImpl implements RemoteSessionManageme
                 uuid = rawUUID[1];
             }
 
-            if (uuid != null && uuid.isEmpty()) {
-                log.error("Could not find a UUID related to the remote session");
-            } else {
+            if (uuid != null && !uuid.isEmpty()) {
                 String tenantDomain = RemoteSessionManagementDataHolder.getInstance().getUuidToTenantMap().remove(uuid);
                 if (tenantDomain == null || tenantDomain.isEmpty()) {
                     log.error("Invalid UUID, could not create the remote session");
@@ -151,6 +149,8 @@ public class RemoteSessionManagementServiceImpl implements RemoteSessionManageme
                     // create new device session
                     initializeDeviceSession(session, tenantDomain, deviceType, deviceId, operationId, uuid);
                 }
+            } else {
+                log.error("Could not find a UUID related to the remote session");
             }
         }
     }
